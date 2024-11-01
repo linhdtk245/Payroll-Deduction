@@ -4,13 +4,13 @@
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 void FedTax(float *federaltax, float income){ // ham tinh thue lien bang cua canada
 	if (income <= 35595){
-		*federaltax = (income*16)/100;
+		*federaltax = (income*0.16);
 	}else if (income > 35595 && income <= 71190){
-		*federaltax = ((income*22)/100) - 2136;
+		*federaltax = (income*0.22) - 2136.0;
 	}else if (income > 71190 && income <= 155739){
-		*federaltax = ((income*26)/100) - 4983;
+		*federaltax = (income*0.26) - 4983.0;
 	}else{
-		*federaltax = ((income*29)/100) - 8455;
+		*federaltax = (income*0.29) - 8455.0;
 	}
 	if (*federaltax < 0){
 		*federaltax = 0;
@@ -19,26 +19,24 @@ void FedTax(float *federaltax, float income){ // ham tinh thue lien bang cua can
 void PersonalCredit(float *pcredit, float claimedcredit){
 	*pcredit = claimedcredit * (16.0/100); // ham tinh so tin dung ca nhan
 }
-void Cpp(float *cppcredit, int payperiod, float income, float CppMax){// ham tinh luong huu canada
-	float cppcontri;
-	cppcontri = (income - (3500.0/payperiod)) * (4.95/100);
-	if (cppcontri > 1861.20){
-		cppcontri = 1861.20; // dong gop luong huu khong vuot qua 1861.20
-	}else if (cppcontri < 0){
-		cppcontri = 0; // dong gop luong huu luon luon >= 0
+void Cpp(float *cppcredit, float *cppcontri, int payperiod, float income, float CppMax){// ham tinh luong huu canada
+	*cppcontri = (income - (3500.0/payperiod)) * (4.95/100);
+	if (*cppcontri > 1861.20){
+		*cppcontri = 1861.20; // dong gop luong huu khong vuot qua 1861.20
+	}else if (*cppcontri < 0){
+		*cppcontri = 0; // dong gop luong huu luon luon >= 0
 	}
-	*cppcredit = cppcontri * (16.0/100);
+	*cppcredit = *cppcontri * (16.0/100);
 	if (*cppcredit > CppMax){
 		*cppcredit = CppMax;
 	}
 }
-void EmploymentInsurance(float *eicredit, float income, float EiMax){ // ham tinh bao hiem viec lam
-	float eipremium;
-	eipremium = income * (195.0/10000);
-	if (eipremium > 760.50){
-		eipremium = 760.50; // tin dung viec lam khong vuot qua 760.50
+void EmploymentInsurance(float *eicredit, float *eipremium, float income, float EiMax){ // ham tinh bao hiem viec lam
+	*eipremium = income * (195.0/10000);
+	if (*eipremium > 760.50){
+		*eipremium = 760.50; // tin dung viec lam khong vuot qua 760.50
 	}
-	*eicredit = eipremium * (16.0/100);
+	*eicredit = *eipremium * (16.0/100);
 	if (*eicredit > EiMax){
 		*eicredit = EiMax;
 	}
@@ -58,11 +56,6 @@ void AnnualFedTax(float *annualfedtax, float *basicfedtax, float *labourcredit){
 void FedTaxPerPeriod(float *fedtaxperperiod, float *annualfedtax, int payperiod){
 	*fedtaxperperiod = (*annualfedtax/payperiod);
 }
-/*void output(float *federaltax, float income){
-	printf("Gross income: %.2f\n", income);
-	printf("Deductions: \n");
-	printf("Federal Tax %.2f\n", *federaltax);
-}*/
 int main(int argc, char *argv[]) {
 	float income;
 	float federaltax = 0;
@@ -70,8 +63,10 @@ int main(int argc, char *argv[]) {
 	float pcredit = 0;
 	float claimedcredit = 0;
 	float CppMax = 0;
+	float cppcontri = 0;
 	float cppcredit = 0;
 	float EiMax = 0;
+	float eipremium = 0;
 	float elcredit = 0;
 	float labourcredit = 0;
 	int share = 0;
@@ -96,8 +91,8 @@ int main(int argc, char *argv[]) {
 	scanf("%f", &EiMax);
 	FedTax(&federaltax, income);
 	PersonalCredit(&pcredit, claimedcredit);
-	Cpp(&cppcredit, payperiod, income, CppMax);
-	EmploymentInsurance(&elcredit, income, EiMax);
+	Cpp(&cppcredit, &cppcontri, payperiod, income, CppMax);
+	EmploymentInsurance(&elcredit, &eipremium, income, EiMax);
 	LabourShare(&labourcredit,share);
 	BasicFedTax(&basicfedtax, &federaltax, &pcredit, &cppcredit, &elcredit);
 	AnnualFedTax(&annualfedtax, &basicfedtax, &labourcredit);
@@ -105,8 +100,8 @@ int main(int argc, char *argv[]) {
 	printf("\nGross income:        %.2f", income);
 	printf("\nDeductions: ");
 	printf("\n Federal Tax          %.2f", fedtaxperperiod);
-	printf("\n Canada pension plan  %.2f", cppcredit);
-	printf("\n Employment Insurance %.2f", elcredit);
+	printf("\n Canada pension plan  %.2f", cppcontri);
+	printf("\n Employment Insurance %.2f", eipremium);
 	printf("\n RRSP Contributions   %.2f", ppcontri);
 	return 0;
 }
