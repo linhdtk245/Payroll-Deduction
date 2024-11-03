@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+//Dinh nghia cac hang so cho nam 2005
+
+#define TI_LE_CPP 0.0495 //Ti le khau tru CPP
+#define GIOI_HAN_CPP 1861.20 //Gioi han toi da CPP hang nam
+#define MUC_MIEN_TRU_CPP 3500.00 //Muc mien tru CPP hang nam
+#define TI_LE_EI 0.0195 //Ti le khau tru EI
+#define GIOI_HAN_EI 760.50 //Gioi han toi da EI hang nam
+
+int main(int argc, char *argv[]) {
+	double thu_nhap,  rrsp, phi_cong_doan, cpp_tich_luy, ei_tich_luy;
+	int so_ky_luong, so_nguoi_phu_thuoc;
+	double tin_dung_lien_bang, tin_dung_tinh, co_phieu, khau_tru_duoc_phep;
+	
+	//Nhap thong tin tu ban phim
+	
+	printf ("May tinh khau tru luong\n");
+	printf ("=======================\n\n");
+	
+	printf ("Vui long nhap thong tin ky luong cua nhan vien\n");
+	printf ("Thu nhap cho ky luong hien tai : ");
+	scanf ("%lf", &thu_nhap);
+	printf ("Dong gop cho quy huu tri (RRSP) :");
+	scanf ("%lf", &rrsp);
+	printf ("Phi cong doan ki luong hien tai : ");
+	scanf ("%lf", &phi_cong_doan);
+	
+	printf (" Vui long nhap thong tin hang nam cua nhan vien: \n");
+	printf ("So ky luong trong nam :");
+	scanf ("%d", &so_ky_luong);
+	printf ("Tin dung thue lien bang (TD1) : ");
+	scanf ("%lf", &tin_dung_lien_bang);
+	printf ("Tin dung thue tinh bang (TD1) : ");
+	scanf ("%lf", &tin_dung_tinh);
+	printf("So nguoi phu thuoc duoi 18 tuoi : ");
+    scanf("%d", &so_nguoi_phu_thuoc);
+    printf("Mua co phieu ho tro lao dong : ");
+    scanf("%lf", &co_phieu);
+    printf("Khau tru duoc phep : ");
+    scanf("%lf", &khau_tru_duoc_phep);
+
+    printf(" Vui long nhap thong tin tich luy trong nam cua nhan vien :\n");
+    printf(" Dong gop CPP tu dau nam : ");
+    scanf("%lf", &cpp_tich_luy);
+    printf(" Phi bao hiem EI tu dau nam : ");
+    scanf("%lf", &ei_tich_luy);
+
+	//tinh toan khau tru CPP
+	double khau_tru_cpp = (thu_nhap - MUC_MIEN_TRU_CPP / so_ky_luong) * TI_LE_CPP;
+	if (khau_tru_cpp < 0) {
+		khau_tru_cpp = 0; //Dam bao khong co khau tru am
+	}
+	if (khau_tru_cpp * so_ky_luong + cpp_tich_luy > GIOI_HAN_CPP) {
+		khau_tru_cpp = (GIOI_HAN_CPP - cpp_tich_luy)/so_ky_luong;
+	}
+	
+	//Tinh toan khau tru EI
+	double khau_tru_ei = thu_nhap * TI_LE_EI;
+	if (khau_tru_ei * so_ky_luong + ei_tich_luy > GIOI_HAN_EI) {
+		khau_tru_ei = (GIOI_HAN_EI - ei_tich_luy) / so_ky_luong;
+	}
+	
+	//Hien thi ket qua
+	
+	printf ("\n Thu nhap gop  %10.2lf\n", thu_nhap);
+	printf ("Khau tru : \n");
+	printf ("CPP : %10.2lf\n", khau_tru_cpp);
+	printf ("Bao hiem EI : %10.2lf\n", khau_tru_ei);
+	printf ("Dong gop RRSP : %10.2lf\n", rrsp);
+	printf ("Phi cong doan : %10.2lf\n", phi_cong_doan);
+	
+	double tong_khau_tru = khau_tru_cpp + khau_tru_ei + rrsp + phi_cong_doan;
+	double thu_nhap_thuc = thu_nhap - tong_khau_tru;
+	
+	printf ("Tong khau tru : %10.2lf\n", tong_khau_tru);
+	printf ("Thu nhap thuc : %10.2lf\n", thu_nhap_thuc);
+	
+	return 0;
+	
+}
